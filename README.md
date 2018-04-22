@@ -23,8 +23,20 @@ mv composer.phar /usr/bin/composer
 composer create-project laravel/laravel /var/www/html/laravel
 
 nano /etc/apache2/sites-available/000-default.conf
-
+## add following lines
 DocumentRoot "/var/www/html/laravel/public"
+
+    CustomLog       /var/www/html/laravel/access.log common
+    ErrorLog        /var/www/html/laravel/error.log    
+
+   <Directory /var/www/html/laravel/public>
+      <IfModule mod_rewrite.c>
+       Options -MultiViews
+       RewriteEngine On
+       RewriteCond %{REQUEST_FILENAME} !-f
+       RewriteRule ^ index.php [L]
+      </IfModule>
+   </Directory>
 
 systemctl restart apache2
 
